@@ -4,8 +4,6 @@ import com.example.springrestapi.models.User;
 import com.example.springrestapi.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
