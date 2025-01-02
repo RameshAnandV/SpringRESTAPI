@@ -1,8 +1,12 @@
 package com.example.springrestapi.services;
 
+import com.example.springrestapi.exceptions.UserNotFoudException;
 import com.example.springrestapi.models.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +33,23 @@ public class UserService {
                 return user;
             }
         }
-        return null;
+        throw new UserNotFoudException("User with id not found: " + id);
     }
 
-    public int addUser(User user) {
+    public ResponseEntity addUser(User user) {
         int id = ++count;
         user.setId(id);
         users.add(user);
-        return id;
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/getUser/{id}").buildAndExpand(id ).toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+    public ResponseEntity deleteUser(Integer id) {
+        for (User user : users) {
+            if(user.getId() == id) {
+               users.remove(user);
+            }
+        }
+        return ResponseEntity.ok().build();
     }
 }

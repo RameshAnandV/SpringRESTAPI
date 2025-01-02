@@ -2,6 +2,7 @@ package com.example.springrestapi.resources;
 
 import com.example.springrestapi.models.User;
 import com.example.springrestapi.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,12 @@ public class UserResource {
     }
 
     @PostMapping("/addUser")
-    public int addUser(@RequestBody User user) {
+    public ResponseEntity addUser(@RequestBody User user) {
         return userService.addUser(user);
+    }
+
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity deleteUserById(@PathVariable("id") int id) {
+        return userService.deleteUser(id);
     }
 }
