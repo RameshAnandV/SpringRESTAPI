@@ -22,12 +22,12 @@ public class UserResource {
     }
 
     @GetMapping("/getUser/{id}")
-    public List<User> getUserById(@RequestParam("id") int id) {
-        return userService.getUsers();
+    public User getUserById(@PathVariable("id") int id) {
+        return userService.getUser(id);
     }
 
     @PostMapping("/addUser")
     public int addUser(@RequestBody User user) {
-       return userService.addUser(user);
+        return userService.addUser(user);
     }
 }

@@ -6,9 +6,10 @@ import java.util.Date;
 public class User {
     int id;
     String name;
-    Date birtDate;
+    LocalDate birtDate;
 
-    public User(int id, String name, Date birtDate) {
+
+    public User(int id, String name, LocalDate birtDate) {
         this.name = name;
         this.id = id;
         this.birtDate = birtDate;
