@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 public class Error {
     private LocalDate timestamp = LocalDate.now();
     private String message;
-    private Exception exception;
+    private String exception;
 
-    public Error(LocalDate timestamp, String message, Exception exception) {
+    public Error(LocalDate timestamp, String message, String exception) {
         this.timestamp = timestamp;
         this.message = message;
         this.exception = exception;
@@ -30,11 +30,11 @@ public class Error {
         this.message = message;
     }
 
-    public Exception getException() {
+    public String getException() {
         return exception;
     }
 
-    public void setException(Exception exception) {
+    public void setException(String exception) {
         this.exception = exception;
     }
 }

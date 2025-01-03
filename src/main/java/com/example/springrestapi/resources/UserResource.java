@@ -2,19 +2,23 @@ package com.example.springrestapi.resources;
 
 import com.example.springrestapi.models.User;
 import com.example.springrestapi.services.UserService;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 @RestController
 @RequestMapping("/users")
 public class UserResource {
 
     private UserService userService;
+    private MessageSource messageSource;
 
-    public UserResource(UserService userService) {
+    public UserResource(UserService userService, MessageSource messageSource) {
         this.userService = userService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/getUsers")

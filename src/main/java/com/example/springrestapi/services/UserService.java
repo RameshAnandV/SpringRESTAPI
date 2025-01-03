@@ -2,6 +2,9 @@ package com.example.springrestapi.services;
 
 import com.example.springrestapi.exceptions.UserNotFoudException;
 import com.example.springrestapi.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -10,9 +13,13 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class UserService {
+
+    @Autowired
+    MessageSource messageSource;
 
     private static List<User> users = new ArrayList<>();
     private static Integer count = 0;
@@ -33,7 +40,9 @@ public class UserService {
                 return user;
             }
         }
-        throw new UserNotFoudException("User with id not found: " + id);
+
+        Locale locale = LocaleContextHolder.getLocale();
+        throw new UserNotFoudException(messageSource.getMessage("user.not.found",  null,"User with id not found", locale) + id);
     }
 
     public ResponseEntity addUser(User user) {
