@@ -28,6 +28,8 @@ public class UserService {
         users.add(new User(++count, "user1", LocalDate.now().minusYears(20).minusMonths(2).minusDays(3)));
         users.add(new User(++count, "user2", LocalDate.now().minusYears(30).minusMonths(3).minusDays(5)));
         users.add(new User(++count, "user3", LocalDate.now().minusYears(22).minusMonths(6).minusDays(4)));
+        users.add(new User(++count, "user4", LocalDate.now().minusYears(22).minusMonths(6).minusDays(4), "Engineering", "password", 1));
+        users.add(new User(++count, "user5", LocalDate.now().minusYears(22).minusMonths(6).minusDays(4), "Engineering", "password", 2));
     }
 
     public List<User> getUsers() {
@@ -49,6 +51,7 @@ public class UserService {
         int id = ++count;
         user.setId(id);
         users.add(user);
+        user.setPassword("password");
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/getUser/{id}").buildAndExpand(id ).toUri();
         return ResponseEntity.created(location).build();
     }
