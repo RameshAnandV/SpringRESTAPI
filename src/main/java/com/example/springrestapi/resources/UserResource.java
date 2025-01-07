@@ -3,7 +3,6 @@ package com.example.springrestapi.resources;
 import com.example.springrestapi.models.User;
 import com.example.springrestapi.services.UserService;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.context.MessageSource;
@@ -12,7 +11,6 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 @RestController
 @RequestMapping("/users")
@@ -39,7 +37,6 @@ public class UserResource {
     @GetMapping("/v2/getUser/{id}")
     public User getUserByIdV2(@PathVariable("id") int id) {
         User user = userService.getUser(id);
-        user.setDepartment("Engineering");
         return user;
     }
 
@@ -52,7 +49,6 @@ public class UserResource {
     @GetMapping(value = "/getUser/{id}", params = "version=2")
     public User getUserByIdVersion2(@PathVariable("id") int id) {
         User user = userService.getUser(id);
-        user.setDepartment("Engineering");
         return user;
     }
 

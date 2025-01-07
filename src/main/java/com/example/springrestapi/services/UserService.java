@@ -1,7 +1,8 @@
 package com.example.springrestapi.services;
 
-import com.example.springrestapi.exceptions.UserNotFoudException;
+import com.example.springrestapi.exceptions.NotFoudException;
 import com.example.springrestapi.models.User;
+import com.example.springrestapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -10,10 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,47 +21,31 @@ public class UserService {
     @Autowired
     MessageSource messageSource;
 
-    private static List<User> users = new ArrayList<>();
-    private static Integer count = 0;
-
-    static {
-        users.add(new User(++count, "user1", LocalDate.now().minusYears(20).minusMonths(2).minusDays(3)));
-        users.add(new User(++count, "user2", LocalDate.now().minusYears(30).minusMonths(3).minusDays(5)));
-        users.add(new User(++count, "user3", LocalDate.now().minusYears(22).minusMonths(6).minusDays(4)));
-        users.add(new User(++count, "user4", LocalDate.now().minusYears(22).minusMonths(6).minusDays(4), "Engineering", "password", 1));
-        users.add(new User(++count, "user5", LocalDate.now().minusYears(22).minusMonths(6).minusDays(4), "Engineering", "password", 2));
-    }
+    @Autowired
+    UserRepository userRepository;
 
     public List<User> getUsers() {
-        return users;
+        return userRepository.findAll();
     }
 
     public User getUser(Integer id) {
-        for (User user : users) {
-            if(user.getId() == id) {
-                return user;
-            }
-        }
-
+        Optional<User> users = userRepository.findById(id);
         Locale locale = LocaleContextHolder.getLocale();
-        throw new UserNotFoudException(messageSource.getMessage("user.not.found",  null,"User with id not found", locale) + id);
+        if(users.isEmpty()) {
+            throw new NotFoudException(messageSource.getMessage("user.not.found", null, "User with id not found", locale) + id);
+        }
+      return users.get();
     }
 
     public ResponseEntity addUser(User user) {
-        int id = ++count;
-        user.setId(id);
-        users.add(user);
-        user.setPassword("password");
-        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/getUser/{id}").buildAndExpand(id ).toUri();
+        user = userRepository.save(user);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/getUser/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
 
     public ResponseEntity deleteUser(Integer id) {
-        for (User user : users) {
-            if(user.getId() == id) {
-               users.remove(user);
-            }
-        }
+        userRepository.readUsersById(id);
         return ResponseEntity.ok().build();
     }
 }

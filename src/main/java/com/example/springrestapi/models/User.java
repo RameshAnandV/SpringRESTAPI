@@ -1,42 +1,44 @@
 package com.example.springrestapi.models;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"department"})
-@JsonFilter("GradeFilter")
+@Entity(name="userdetails")
 public class User {
 
-    int id;
+    @Id
+    Integer  id;
+
     @JsonProperty("UserName")
     String name;
 
     @JsonProperty("BirthDate")
     LocalDate birthDate;
-    String department;
 
     @JsonIgnore
     String password;
 
-    int grade;
+    @OneToMany(mappedBy = "user")
+    private List<Book> books;
 
-    public int getGrade() {
-        return grade;
+    public User() {
     }
 
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
-    public User(int id, String name, LocalDate birthDate, String department, String password, int grade) {
+    public User(int id, String name, LocalDate birthDate, String password) {
         this.name = name;
         this.id = id;
         this.birthDate = birthDate;
         this.password = password;
-        this.department = department;
-        this.grade = grade;
     }
 
     public User(int id, String name, LocalDate birthDate) {
@@ -51,14 +53,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
     }
 
     public int getId() {
